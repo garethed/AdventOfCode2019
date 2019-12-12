@@ -21,7 +21,7 @@ namespace AdventOfCode2019
 
             bool ret = true;
 
-            foreach (var m in target.GetType().GetMethods(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)) {
+            foreach (var m in target.GetType().GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)) {
                 foreach (var t in (TestAttribute[])m.GetCustomAttributes(typeof(TestAttribute), false)) {
 
                     try {
@@ -31,8 +31,9 @@ namespace AdventOfCode2019
                         var e2 = Convert.ChangeType(t.e, m.ReturnType);
                         ret &= Utils.Assert(string.Join(',', p2.Select(x => x.ToString()).ToArray()), o.ToString(), e2.ToString());
                     }
-                    catch 
+                    catch (Exception e)
                     {
+                        Console.WriteLine(e);
                         ret = false;
                         Utils.Assert(string.Join(',', t.p.Select(x => x.ToString()).ToArray()), "[test error]", t.e.ToString());
                     }

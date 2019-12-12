@@ -5,20 +5,14 @@ namespace AdventOfCode2019 {
 
     class Day2 : Day
     {
-        public override string Part1(string input, dynamic options)
+        public override string Part1(string input)
         {
             throw new NotImplementedException();            
         }
 
-        public override string Part2(string input, dynamic options)
+        public override string Part2(string input)
         {
             throw new NotImplementedException();
-        }
-
-        public override bool Test()
-        {
-            return Utils.Test(Part1, new[] {0}, new[] {0})
-                && Utils.Test(Part2, new[] {0}, new[] {0});
         }
     }
 }

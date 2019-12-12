@@ -15,7 +15,7 @@ namespace AdventOfCode2019
 
             if (File.Exists(file))
             {
-                return File.ReadAllText(file);
+                return File.ReadAllText(file).Trim('\n');
             }
             return "";
         }

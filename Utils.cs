@@ -10,6 +10,12 @@ namespace AdventOfCode2019
 {
     static class Utils
     {
+        public static string describe<T>(this T[] array)
+        {
+            return string.Join(',', array.Select(i => i.ToString()));
+        }
+
+
         public static IEnumerable<T> flatten<T>(this T[,] array)
         {
             for (int i = 0; i < array.Length; i++)

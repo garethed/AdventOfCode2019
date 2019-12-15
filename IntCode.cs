@@ -6,10 +6,10 @@ namespace AdventOfCode2019
 {
     class IntCode 
     {
-        int[] program;
+        long[] program;
         
         public IntCode(string program) {
-            this.program = program.Split(",").Select(i => int.Parse(i)).ToArray();
+            this.program = program.Split(",").Select(i => long.Parse(i)).ToArray();
             Reset();
         }
 
@@ -22,23 +22,27 @@ namespace AdventOfCode2019
             return ret;
         }
 
-        int[] data;
-        int ix;
+        long[] data;
+        long ix;
+        long rb;
 
-        int op;
-        Queue<int> modes;
+        long op;
+        Queue<long> modes;
 
-        Queue<int> inputs = new Queue<int>();
+        Queue<long> inputs = new Queue<long>();
 
         public void Reset() {
-            this.data = (int[]) program.Clone();
+            this.data = new long[8192];
+            program.CopyTo(data, 0);
+            
             ix = 0;
+            rb = 0;
         }
 
-        public int[] Run(params int[] inputs) {
-            this.inputs = new Queue<int>(inputs);
+        public long[] Run(params long[] inputs) {
+            this.inputs = new Queue<long>(inputs);
             Reset();
-            List<int> outputs = new List<int>();
+            List<long> outputs = new List<long>();
             try {
                 while (true) {
                     outputs.Add(Run());
@@ -49,20 +53,20 @@ namespace AdventOfCode2019
             }
         }
 
-        public void AddInput(int i) {
+        public void AddInput(long i) {
             inputs.Enqueue(i);
         }
 
-        public int RunToOutput() {
+        public long RunToOutput() {
             return Run();
         }
 
-        int Run() {
+        long Run() {
             
             while (ix < data.Length) {
                 var opcode = data[ix++];
                 op = opcode % 100;
-                modes = new Queue<int>(new[] {
+                modes = new Queue<long>(new[] {
                     (opcode / 100) % 10,
                     (opcode / 1000) % 10,
                     opcode / 10000});
@@ -115,21 +119,31 @@ namespace AdventOfCode2019
                             put(0);
                         }
                         break;
+                    case 9:
+                        rb += get();
+                        break;
+
                 }
             }
 
             throw new InvalidOperationException();
         }
 
-        private void put(int value) {
-            data[data[ix++]] = value;
+        private void put(long value) {
+            var offset = (modes.Dequeue() == 2 ? rb : 0);
+            data[offset + data[ix++]] = value;
         }
 
-        private int get() {
-            if (modes.Dequeue() == 1) {
-                return data[ix++];
+        private long get() {
+            long mode = modes.Dequeue();
+            long value = data[ix++];
+            if (mode == 2) {
+                return data[rb + value];
+            }
+            else if (mode == 1) {
+                return value;
             } 
-            return data[data[ix++]];
+            return data[value];
         }
 
         public class HaltException : Exception {}

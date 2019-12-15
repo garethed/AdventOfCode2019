@@ -6,7 +6,7 @@ namespace AdventOfCode2019 {
 
     class Day7 : Day
     {
-        int max = 0;
+        long max = 0;
         IntCode intCode;
 
 
@@ -22,7 +22,7 @@ namespace AdventOfCode2019 {
             return max.ToString();
         }
 
-        private void buildChain(int input, HashSet<int> phases)
+        private void buildChain(long input, HashSet<int> phases)
         {
             foreach (var p in phases) {
                 var output = intCode.Run(p, input)[0];
@@ -52,7 +52,7 @@ namespace AdventOfCode2019 {
                 }
 
                 var ix = 0;
-                var data = 0;
+                var data = 0L;
 
                 try
                 {

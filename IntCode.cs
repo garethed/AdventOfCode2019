@@ -10,26 +10,55 @@ namespace AdventOfCode2019
         
         public IntCode(string program) {
             this.program = program.Split(",").Select(i => int.Parse(i)).ToArray();
+            Reset();
+        }
+
+        private IntCode() {
+        }
+
+        public IntCode Clone(){
+            var ret = new IntCode() { program = program };
+            ret.Reset();
+            return ret;
         }
 
         int[] data;
-        Queue<int> inputs;
         int ix;
-        List<int> outputs = new List<int>();
 
         int op;
         Queue<int> modes;
 
+        Queue<int> inputs = new Queue<int>();
+
+        public void Reset() {
+            this.data = (int[]) program.Clone();
+            ix = 0;
+        }
+
         public int[] Run(params int[] inputs) {
             this.inputs = new Queue<int>(inputs);
-            this.data = (int[]) program.Clone();
-            outputs.Clear();
+            Reset();
+            List<int> outputs = new List<int>();
+            try {
+                while (true) {
+                    outputs.Add(Run());
+                }
+            }
+            catch (HaltException) {
+                return outputs.ToArray();
+            }
+        }
+
+        public void AddInput(int i) {
+            inputs.Enqueue(i);
+        }
+
+        public int RunToOutput() {
             return Run();
         }
 
-        int[] Run() {
+        int Run() {
             
-            ix = 0;
             while (ix < data.Length) {
                 var opcode = data[ix++];
                 op = opcode % 100;
@@ -39,7 +68,7 @@ namespace AdventOfCode2019
                     opcode / 10000});
 
                 if (op == 99) {
-                    return outputs.ToArray();
+                    throw new HaltException();
                 }
 
                 switch (op) {
@@ -53,8 +82,7 @@ namespace AdventOfCode2019
                         put(inputs.Dequeue());
                         break;
                     case 4:
-                        outputs.Add(get());
-                        break;
+                        return get();
                     case 5:
                         if (get() != 0) {
                             ix = get();
@@ -103,6 +131,8 @@ namespace AdventOfCode2019
             } 
             return data[data[ix++]];
         }
+
+        public class HaltException : Exception {}
 
     }
 }

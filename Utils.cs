@@ -15,6 +15,16 @@ namespace AdventOfCode2019
             return string.Join(',', array.Select(i => i.ToString()));
         }
 
+        public static void debug(this bool[,] data) {
+            Console.WriteLine();
+            foreach (var y in Enumerable.Range(0, data.GetLength(1))) {
+                foreach (var x in Enumerable.Range(0, data.GetLength(0))) {
+                    Console.Write(data[x,y] ? '#' : '.');
+                }
+                Console.WriteLine();
+            }
+        }
+
 
         public static IEnumerable<T> flatten<T>(this T[,] array)
         {
@@ -50,6 +60,17 @@ namespace AdventOfCode2019
             }
 
             return success;
+        }
+
+        public static IEnumerable<Point> enumerateGrid(int width, int height) 
+        {
+            foreach (var y in Enumerable.Range(0, height)) 
+            {
+                foreach (var x in Enumerable.Range(0, width)) 
+                {
+                    yield return new Point(x,y);
+                }
+            }
         }
 
         public static bool Test<A,B>(Func<A,B> method, A input, B output)  {

@@ -14,4 +14,27 @@ public struct Point {
     {
         return new Point(x + dx, y + dy);
     }
+
+    public static bool operator ==(Point p1, Point p2)
+    {
+        return p1.Equals(p2);
+    }
+    public static bool operator !=(Point p1, Point p2)
+    {
+        return !p1.Equals(p2);
+    }
+
+    public override bool Equals(object obj)
+    {
+        return  obj is Point && x == ((Point)obj).x && y == ((Point)obj).y;
+    }
+
+    public override int GetHashCode() {
+        return 486187739 * x + y;
+    }
+
+    internal Point Minus(Point other)
+    {
+        return new Point( x - other.x, y - other.y);
+    }
 }

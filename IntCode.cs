@@ -57,6 +57,11 @@ namespace AdventOfCode2019
             inputs.Enqueue(i);
         }
 
+        public void SetInput(long i) {
+            inputs.Clear();
+            AddInput(i);
+        }
+
         public long RunToOutput() {
             return Run();
         }

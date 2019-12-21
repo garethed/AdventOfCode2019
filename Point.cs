@@ -37,4 +37,19 @@ public struct Point {
     {
         return new Point( x - other.x, y - other.y);
     }
+
+    internal Point RotateRight()
+    {
+        return new Point(-y, x);
+    }
+
+    internal Point RotateLeft()
+    {
+        return new Point(y, -x);
+    }
+
+    internal Point Plus(Point direction)
+    {
+        return new Point(x + direction.x, y + direction.y);
+    }
 }

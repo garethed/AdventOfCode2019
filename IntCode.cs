@@ -39,6 +39,11 @@ namespace AdventOfCode2019
             rb = 0;
         }
 
+        internal void SetMemory(int pos, int value)
+        {
+            data[pos] = value;
+        }
+
         public long[] Run(params long[] inputs) {
             this.inputs = new Queue<long>(inputs);
             Reset();

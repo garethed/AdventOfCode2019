@@ -151,5 +151,21 @@ namespace AdventOfCode2019
             System.IO.File.WriteAllText(temp, sb.ToString());
             Process.Start(temp);
         }
+
+        public static long gcf(long a, long b)
+        {
+            while (b != 0L)
+            {
+                long temp = b;
+                b = a % b;
+                a = temp;
+            }
+            return a;
+        }
+
+        public static long lcm(long a, long b)
+        {
+            return (a / gcf(a, b)) * b;
+        }
     }
 }

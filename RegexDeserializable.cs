@@ -32,7 +32,39 @@ namespace AdventOfCode2019
 
             foreach (Match match in matches)
             {
-                var output = Activator.CreateInstance<T>();
+                T output;
+
+                foreach (var constructor in typeof(T).GetConstructors()) 
+                {
+                    var parameters = new List<object>();
+                    if (r.GetGroupNames().Length - 1 == constructor.GetParameters().Length)
+                    {
+                        foreach (var parameter in constructor.GetParameters()) 
+                        {
+                            foreach (var groupName in r.GetGroupNames().Skip(1))
+                            {
+                                if (groupName == parameter.Name)
+                                {
+                                    string value = match.Groups[groupName].Value;
+                                    var converted = Convert.ChangeType(value, parameter.ParameterType);
+                                    parameters.Add(converted);
+                                }
+                            }
+
+                        }
+                    }
+
+                    if (parameters.Count == constructor.GetParameters().Length)
+                    {
+                        output = (T)constructor.Invoke(parameters.ToArray());
+                        goto NextObject;
+                    }
+
+                }
+
+
+
+                output = Activator.CreateInstance<T>();
 
                 foreach (var groupName in r.GetGroupNames().Skip(1))
                 {
@@ -58,6 +90,7 @@ namespace AdventOfCode2019
                     }
                 }
 
+            NextObject:
                 results.Add(output);
 
             }
